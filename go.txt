@@ -1,0 +1,175 @@
+Linguagem compilada
+Lida bem com concorrência
+Fortemente tipada
+Criada pelo Google
+Pacote é um conjunto de arquivos pertencentes ao mesmo diretório que são compilados juntos
+Para ser um pacote executável, obrigatoriamente o pacote precisa ser o main
+Ao lidar com pacotes em go, é necessário criar um módulo. Módulo é um conjunto de pacotes que compoem o projeto (criados ou externos)
+go não é orientado a objetos
+A primeira letra do nome dos módulos (maiúscula ou minúscula) determina a visibiliade
+minúsculo é visível apenas dentro do pacote de origem
+maisculo pode ser utilizada em outros pacotes após importação
+O go não permite declarar variáveis ou importar pacotes e não utilizá-los
+
+go.mod é o arquivo que faz o controle das dependências do projeto. Não convém mexer nesse arquivo manualmente
+
+go run filename.go
+
+go mod init moduleName
+
+go build - cria um binário com todos os arquivos fonte do módulo criado. Após isso é possível rodar o código utilizando o comando
+
+./moduleName
+
+nil - nulo do go
+
+go mod tidy - remove todas as dependências do projeto que estão no go.mod, mas não são utilizadas
+
+// -- variáveis e constantes -- //
+
+var variableName string = "some text" - tipagem explicita
+variableTwo := "some text two" - declaração implicita (inferência de tipo); tipo determinado pelo valor atribuido
+
+var (
+    variableThree string = "asd"
+    variableFour string = "zxc"
+)
+
+variableFive, variableSix := "qwe", "rty"
+
+const constantOne string = "Constant one"
+
+// -- tipos básicos de dado -- //
+
+integers - int int8, int16, int32, int64 (número de bits suportados por cada variável)
+
+ao utilizar apenas int, o go utiliza a arquitetura do computador como base. ex.: arquitetura x64 vai levar a criação de um int64
+
+uint, uint8, uint16, uint32, uint64 - unsigned integer - não permite o uso de sinal negativo para atribuir um valor para a variável
+
+rune - alias para int32 - var name rune
+byte alias para uint8 - var name byte
+
+float32, float64
+
+var name float32 = 89.10
+var name float64 = 12.34
+
+casas decimais separadas por ponto
+
+valores para variáveis string são atribuidos colocando aspas duplas
+
+no go cada tipo de dado possui um valor zero, um valor padrão para quando a variável é criada, porém sem atribuição de valor
+
+var name string = "name"
+asciiTable := 'B' - recebe o valor do caracter B na tabela ascii
+
+var booleanValue bool = true
+var booleanValue bool = false
+
+var errorVariable error = errors.New("Internal server error")
+
+errors é um pacote interno do go utilizado para a criação de erros
+
+// --- funções --- //
+
+Funções são um tipo no go
+Usar _ em uma função que tem mais de um retorno é o mesmo que dizer ao go para ignorar aquele retorno específico
+func test() (string, string) {
+    return "a", "b"
+}
+
+resultOne, _ = test()
+
+// --- operadores --- //
+
+Não é possível realizar operações entre variáveis de tipos diferentes (ex.: int8, int16)
+Operador de comparação é ==
+Não existe operador ternário em go
+
+// --- struct --- //
+Coleção de campos
+
+type user struct {
+    name string
+    age int
+}
+
+O valor zero de uma struct é a combinação do valor zero de cada um dos campos que compõem a estrutura
+
+// --- ponteiros --- //
+Armazenam a referência na memória de determinada variável
+
+O valor zero de um ponteiro é nil
+
+Para pegar o valor armazenado em um endereço de memória precisamos usar o * (ex.: *user) Esse processo é conhecido como desreferenciação
+
+// --- arrays e slices --- //
+
+Um slice armazena um ponteiro para indices específicos de um array. Qualquer alteração feita nas posições do array vai ser refletida no slice (caso ele armazene essas posições)
+
+append(slice, item)
+slice := make([]float64, 10, 15)
+make([]float64, 5) - ao passar apenas dois argumentos para o make, o tamanho e a capacidade do slice assumem o mesmo valor
+len(slice) - indica o tamanho do slice
+cap(slice) - indica a capacidade do slice
+
+ao criarmos um slice com o make, o go utiliza um array interno como base e retorna uma porção desse array interno
+ao exceder a capacidade de um slice, o go dobra a quantidade de elementos que o slice suporta
+por conta dessa funcionalidade, o slice não possui tamanho limite
+um array é uma lista com tamanho fixo e o slice é uma lista sem tamanho fixo
+
+// --- maps --- //
+map[keyType] valueType {}
+
+user := map[string]string{
+    "name": "John Cena"
+}
+
+delete(map, "keyName")
+
+// --- estruturas de controle --- //
+
+var variable int = 1000
+
+if variable > 100 {
+    fmt.Println("is greater than 100")
+}
+
+if initialization statement - inicializar uma variável no if
+
+if number := 100; number > 50 {
+    fmt.Println("greater than 50")
+}
+
+Ao inicializar uma variável no if estamos limitando sua existência ao escopo do if
+
+var color string = "black"
+
+switch number {
+case "black":
+return "the color is black"
+default:
+return "the color is not black"
+}
+
+O switch do go não usa o break
+
+Existe uma condição no switch do go chamada fallthrough que força o código a entrar na próxima condição do switch
+
+// --- estruturas de repetição --- //
+
+O go só tem o for como estrutura de repetição
+
+var counter int = 0
+
+for counter <= 20 {
+	fmt.Println(counter)
+	counter++
+}
+
+for counter = 0; counter < 10; counter++ {
+	fmt.Println(counter)
+}
+
+A cláusula defer adia a execução de determinada função até o último momento possível
