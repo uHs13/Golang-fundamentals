@@ -173,3 +173,25 @@ for counter = 0; counter < 10; counter++ {
 }
 
 A cláusula defer adia a execução de determinada função até o último momento possível
+
+// --- ponteiros --- //
+
+podem ser passados como argumento de uma função ou retornados dentro de outras funções
+
+func changeNumberSignalWithPointer(number *float64) {
+	*number = *number * -1
+}
+
+*number: não podemos usar apenas number para mexer no valor. Por ser um ponteiro, number armazena um endereço de memória. Colocar *number é chamado de desreferenciação e permite trabalharmos o valor
+
+Para passar uma variável como ponteiro é preciso utilizar o &
+
+number := 100
+
+changeNumberSignalWithPointer(&number)
+
+// --- init --- //
+
+função init é executada antes da main
+
+é possível termos uma função init por arquivo, diferente da main que é permitida apenas um por pacote
