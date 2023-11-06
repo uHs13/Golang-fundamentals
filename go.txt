@@ -191,7 +191,7 @@ number := 100
 changeNumberSignalWithPointer(&number)
 
 // --- init --- //
-
+O método init é executado antes do main
 função init é executada antes da main
 
 é possível termos uma função init por arquivo, diferente da main que é permitida apenas um por pacote
