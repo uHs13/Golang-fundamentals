@@ -138,6 +138,8 @@ if variable > 100 {
 
 if initialization statement - inicializar uma variável no if
 
+utilizando o if init a variável existe apenas no escopo do if. Ao sair do escopo a variável é apagada.
+
 if number := 100; number > 50 {
     fmt.Println("greater than 50")
 }
@@ -201,3 +203,5 @@ Concorrência é diferente de paralelismo: no paralelismo temos duas tarefas sen
 go routines: utilizando a cláusula go antes da chamadas de uma função/método, é possível iniciar a execução do trecho de código e, sem aguardar a finalização dos comandos, pular para a próxima linha seguindo o fluxo de código
 
 canais: são o método mais utilizado para a sincronização de goroutines. Enviam e recebem dados. Esse envio e recebimento são utilizados para sincronizar as goroutines. Trafegem dados apenas de um tipo específico. O envio e o recebimento de dados bloqueiam a execução do programa. Canais tem um risco de deadlock, que é o programa aguardar algo que nunca ocorre. Esse tipo de erro não é verificado durante a compilação, só é possível identificar durante a execução. É preciso fechar o canal após o fim da execução e verificar se ele ainda está aberto antes de esperar o dado.
+
+worker pools: uma fila de processos é executada por vários workers. Isso agiliza a execução do programa. Cada processo passa a ser responsabilidade de um worker.
