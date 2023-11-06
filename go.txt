@@ -191,7 +191,13 @@ number := 100
 changeNumberSignalWithPointer(&number)
 
 // --- init --- //
-O método init é executado antes do main
-função init é executada antes da main
+A função init é executada antes da main
 
 é possível termos uma função init por arquivo, diferente da main que é permitida apenas um por pacote
+
+// --- concorrência --- //
+Concorrência é diferente de paralelismo: no paralelismo temos duas tarefas sendo executadas ao mesmo tempo. Na concorrência isso não necessariamente ocorre. Concorrência pode ser feita com dois serviços alternando a execução dentro do processador, cada hora um executa um pouco.
+
+go routines: utilizando a cláusula go antes da chamadas de uma função/método, é possível iniciar a execução do trecho de código e, sem aguardar a finalização dos comandos, pular para a próxima linha seguindo o fluxo de código
+
+canais: são o método mais utilizado para a sincronização de goroutines. Enviam e recebem dados. Esse envio e recebimento são utilizados para sincronizar as goroutines. Trafegem dados apenas de um tipo específico. O envio e o recebimento de dados bloqueiam a execução do programa. Canais tem um risco de deadlock, que é o programa aguardar algo que nunca ocorre. Esse tipo de erro não é verificado durante a compilação, só é possível identificar durante a execução. É preciso fechar o canal após o fim da execução e verificar se ele ainda está aberto antes de esperar o dado.
