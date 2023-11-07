@@ -25,6 +25,8 @@ nil - nulo do go
 
 go mod tidy - remove todas as dependências do projeto que estão no go.mod, mas não são utilizadas
 
+não é possível ter dois pacotes diferentes dentro da mesma pasta
+
 // -- variáveis e constantes -- //
 
 var variableName string = "some text" - tipagem explicita
@@ -205,3 +207,28 @@ go routines: utilizando a cláusula go antes da chamadas de uma função/método
 canais: são o método mais utilizado para a sincronização de goroutines. Enviam e recebem dados. Esse envio e recebimento são utilizados para sincronizar as goroutines. Trafegem dados apenas de um tipo específico. O envio e o recebimento de dados bloqueiam a execução do programa. Canais tem um risco de deadlock, que é o programa aguardar algo que nunca ocorre. Esse tipo de erro não é verificado durante a compilação, só é possível identificar durante a execução. É preciso fechar o canal após o fim da execução e verificar se ele ainda está aberto antes de esperar o dado.
 
 worker pools: uma fila de processos é executada por vários workers. Isso agiliza a execução do programa. Cada processo passa a ser responsabilidade de um worker.
+
+// --- testes --- //
+TestFunctionName(t *testing.T) {
+	
+}
+
+go test
+
+por padrão esse comando executa os testes do pacote atual
+
+go test ./... - roda os testes de todos os pacotes do projeto
+go test ./... -v - roda os testes com mais informações no retorno do terminal
+
+Ao rodar o comando de testes o go salva o cache dos resultados. Caso ele detecte que não foi feita nenhuma alteração na função original e nem na função de testes, ele pega o resultado do cache para economizar tempo de execução.
+
+t.Parallel() - ao colocar esse trecho decódigo no início das funções de teste elas são executadas em paralelo
+
+go test ./... --cover - exibe a porcentagem dos trechos de código do método original que estão sendo cobertos por teste
+
+go test ./... --coverprofile=filename.txt
+go tool cover --func=filename.txt
+
+go tool cover --html=filename.txt
+
+quando criamos um arquivo de teste é possível ter mais de um pacote por pasta: pacote_original e pacote_original_test
