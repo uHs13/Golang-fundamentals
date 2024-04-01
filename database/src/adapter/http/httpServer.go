@@ -2,7 +2,7 @@ package http
 
 import (
 	"database/sql"
-	user "database/src/adapter/http/routes"
+	user "database/src/adapter/http/routes/user"
 	"fmt"
 	"net/http"
 	"os"
