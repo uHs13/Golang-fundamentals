@@ -11,7 +11,7 @@ type UserDatabase struct {
 }
 
 const (
-	createUserQuery = "INSERT INTO user (id, name, email, created_at) VALUES (?, ?, ?, ?)"
+	createUserQuery = "INSERT INTO user (ID, NAME, EMAIL, CREATED_AT) VALUES (?, ?, ?, ?)"
 )
 
 func NewUserDatabase(connection *sql.DB) repositories.UserRepository {

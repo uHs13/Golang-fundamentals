@@ -11,9 +11,7 @@ import (
 	userUseCase "database/src/core/useCase"
 	"database/src/infra/database/repository"
 	"database/src/infra/requestEntity/userRequestEntity"
-	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/google/uuid"
 )
@@ -38,10 +36,9 @@ func (createUserHandler *CreateUserHandler) Handle(
 	if err != nil {
 		routes.NewJsonResponse(
 			w,
-			routesConstants.MessageKeyConst,
 			err.Error(),
 			routesConstants.BadRequestConst,
-		).ThrowError()
+		).SendJson()
 
 		return
 	}
@@ -54,16 +51,18 @@ func (createUserHandler *CreateUserHandler) Handle(
 	if err != nil {
 		routes.NewJsonResponse(
 			w,
-			routesConstants.MessageKeyConst,
 			err.Error(),
 			routesConstants.BadRequestConst,
-		).ThrowError()
+		).SendJson()
 
 		return
 	}
 
-	fmt.Println(user)
-	os.Exit(1)
+	routes.NewJsonResponse(
+		w,
+		routesConstants.MessageUserCreated,
+		routesConstants.CreatedRequestConst,
+	).SendJson()
 }
 
 func (createUserHandler *CreateUserHandler) defineCreateUser(

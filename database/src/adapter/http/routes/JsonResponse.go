@@ -8,26 +8,23 @@ import (
 
 type JsonResponse struct {
 	Writer     http.ResponseWriter `json:"-"`
-	Key        string              `json:"key"`
-	Err        string              `json:"error"`
+	Message    string              `json:"message"`
 	StatusCode int                 `json:"statusCode"`
 }
 
 func NewJsonResponse(
 	writer http.ResponseWriter,
-	key string,
-	err string,
+	message string,
 	statusCode int,
 ) *JsonResponse {
 	return &JsonResponse{
 		Writer:     writer,
-		Key:        key,
-		Err:        err,
+		Message:    message,
 		StatusCode: statusCode,
 	}
 }
 
-func (jsonResponse *JsonResponse) ThrowError() {
+func (jsonResponse *JsonResponse) SendJson() {
 	jsonResponse.Writer.Header().Set("Content-type", "application/json")
 	jsonResponse.Writer.WriteHeader(jsonResponse.StatusCode)
 
