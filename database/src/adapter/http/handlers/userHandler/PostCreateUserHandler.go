@@ -8,7 +8,7 @@ import (
 	userDomain "database/src/core/domain/user"
 	"database/src/core/port"
 	"database/src/core/port/repositories"
-	userUseCase "database/src/core/useCase"
+	createUser "database/src/core/useCase/createUser"
 	"database/src/infra/database/repository"
 	"database/src/infra/requestEntity/userRequestEntity"
 	"net/http"
@@ -38,12 +38,12 @@ func (createUserHandler *CreateUserHandler) Handle(
 			w,
 			err.Error(),
 			routesConstants.BadRequestConst,
-		).SendJson()
+		).SendSimpleJson()
 
 		return
 	}
 
-	err = userUseCase.NewCreateUser(
+	err = createUser.NewCreateUser(
 		repository.NewUserDatabase(createUserHandler.Connection),
 		*user,
 	).Execute()
@@ -53,7 +53,7 @@ func (createUserHandler *CreateUserHandler) Handle(
 			w,
 			err.Error(),
 			routesConstants.BadRequestConst,
-		).SendJson()
+		).SendSimpleJson()
 
 		return
 	}
@@ -62,7 +62,7 @@ func (createUserHandler *CreateUserHandler) Handle(
 		w,
 		routesConstants.MessageUserCreated,
 		routesConstants.CreatedRequestConst,
-	).SendJson()
+	).SendSimpleJson()
 }
 
 func (createUserHandler *CreateUserHandler) defineCreateUser(

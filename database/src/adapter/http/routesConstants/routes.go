@@ -4,6 +4,7 @@ import "net/http"
 
 const (
 	PostCreateUser = "/user"
+	GetUsers       = "/users"
 
 	MessageKeyConst    = "message"
 	MessageUserCreated = "User successfully created!"

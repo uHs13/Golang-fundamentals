@@ -15,6 +15,7 @@ const (
 	createUserQuery                   = "INSERT INTO user (id_user, name, email, created_at) VALUES (?, ?, ?, ?)"
 	isEmailAlreadyRegisteredUserQuery = "SELECT email FROM user WHERE email = ? LIMIT 1"
 	isIdAlreadyRegisteredUserQuery    = "SELECT id_user FROM user WHERE id_user = ? LIMIT 1"
+	getUsersQuery                     = "SELECT id_user, name, email FROM user WHERE deleted_at IS NULL ORDER BY created_at DESC"
 
 	isEmailAlreadyRisteredErrorMsg = "invalid email"
 	isIdAlreadyRisteredErrorMsg    = "invalid id"
@@ -107,4 +108,33 @@ func (userDatabase *UserDatabase) IsIdAlreadyRegistered(user userDomain.User) er
 	}
 
 	return nil
+}
+
+func (userDatabase *UserDatabase) FindUsers() ([]userDomain.User, error) {
+	statement, err := userDatabase.connection.Prepare(getUsersQuery)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer statement.Close()
+
+	rows, err := statement.Query()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var users []userDomain.User
+	var user userDomain.User
+
+	for rows.Next() {
+		if err := rows.Scan(&user.Id, &user.Name, &user.Email); err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
 }

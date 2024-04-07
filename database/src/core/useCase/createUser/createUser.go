@@ -1,4 +1,4 @@
-package userUseCase
+package createUser
 
 import (
 	userDomain "database/src/core/domain/user"

@@ -24,7 +24,7 @@ func NewJsonResponse(
 	}
 }
 
-func (jsonResponse *JsonResponse) SendJson() {
+func (jsonResponse *JsonResponse) SendSimpleJson() {
 	jsonResponse.Writer.Header().Set("Content-type", "application/json")
 	jsonResponse.Writer.WriteHeader(jsonResponse.StatusCode)
 
@@ -35,4 +35,15 @@ func (jsonResponse *JsonResponse) SendJson() {
 	}
 
 	jsonResponse.Writer.Write(responseMarshal)
+}
+
+func (jsonResponse *JsonResponse) SendArrayJson(key string, data interface{}) {
+	jsonResponse.Writer.Header().Set("Content-type", "application/json")
+	jsonResponse.Writer.WriteHeader(jsonResponse.StatusCode)
+
+	response := map[string]interface{}{key: data}
+
+	if err := json.NewEncoder(jsonResponse.Writer).Encode(response); err != nil {
+		jsonResponse.Writer.Write([]byte(err.Error()))
+	}
 }

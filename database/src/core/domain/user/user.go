@@ -1,12 +1,12 @@
 package userDomain
 
 type User struct {
-	Id          string
-	Name        string
-	Email       string
-	DateCreated string
-	DateUpdated string
-	DateDeleted string
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	DateCreated string `json:"-"`
+	DateUpdated string `json:"-"`
+	DateDeleted string `json:"-"`
 }
 
 func NewUser(

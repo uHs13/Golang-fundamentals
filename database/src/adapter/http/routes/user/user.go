@@ -12,6 +12,7 @@ import (
 
 const (
 	PostCreateHandlerKeyConst string = "postCreateUserHandler"
+	GetUsersHandlerKeyConst   string = "getUsersHandler"
 )
 
 type UserRoutes struct {
@@ -34,10 +35,16 @@ func (userRoutes *UserRoutes) Register() {
 		routesConstants.PostCreateUser,
 		userRoutes.userHandlers[PostCreateHandlerKeyConst].Handle,
 	).Methods(http.MethodPost)
+
+	userRoutes.app.HandleFunc(
+		routesConstants.GetUsers,
+		userRoutes.userHandlers[GetUsersHandlerKeyConst].Handle,
+	).Methods(http.MethodGet)
 }
 
 func createUserHandlers(connection *sql.DB) map[string]port.HandlerInterface {
 	return map[string]port.HandlerInterface{
 		PostCreateHandlerKeyConst: userHandler.NewCreateUserHandler(connection),
+		GetUsersHandlerKeyConst:   userHandler.NewFindUsersHandler(connection),
 	}
 }
