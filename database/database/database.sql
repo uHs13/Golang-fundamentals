@@ -1,0 +1,9 @@
+CREATE TABLE user(
+    id_user VARCHAR(36) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL,
+    PRIMARY KEY(id_user)
+);

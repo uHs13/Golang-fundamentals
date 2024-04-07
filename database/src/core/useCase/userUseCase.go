@@ -21,7 +21,23 @@ func NewCreateUser(
 }
 
 func (createUser *CreateUser) Execute() error {
-	err := createUser.userRepository.Create(createUser.user)
+	err := createUser.
+		userRepository.
+		IsEmailAlreadyRegistered(createUser.user)
+
+	if err != nil {
+		return err
+	}
+
+	err = createUser.
+		userRepository.
+		IsIdAlreadyRegistered(createUser.user)
+
+	if err != nil {
+		return err
+	}
+
+	err = createUser.userRepository.Create(createUser.user)
 
 	if err != nil {
 		return err
