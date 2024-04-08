@@ -22,12 +22,12 @@ func NewFindUsersHandler(connection *sql.DB) port.HandlerInterface {
 	}
 }
 
-func (getUsersHandler *FindUsersHandler) Handle(
+func (findUsersHandler *FindUsersHandler) Handle(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	users, err := findUsers.NewFindUsers(
-		repository.NewUserDatabase(getUsersHandler.Connection),
+		repository.NewUserDatabase(findUsersHandler.Connection),
 	).Execute()
 
 	if err != nil {
@@ -44,5 +44,5 @@ func (getUsersHandler *FindUsersHandler) Handle(
 		w,
 		"",
 		routesConstants.CreatedRequestConst,
-	).SendArrayJson("users", users)
+	).SendArrayJson(routesConstants.UsersKeyConst, users)
 }

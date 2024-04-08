@@ -15,7 +15,8 @@ const (
 	createUserQuery                   = "INSERT INTO user (id_user, name, email, created_at) VALUES (?, ?, ?, ?)"
 	isEmailAlreadyRegisteredUserQuery = "SELECT email FROM user WHERE email = ? LIMIT 1"
 	isIdAlreadyRegisteredUserQuery    = "SELECT id_user FROM user WHERE id_user = ? LIMIT 1"
-	getUsersQuery                     = "SELECT id_user, name, email FROM user WHERE deleted_at IS NULL ORDER BY created_at DESC"
+	findUsersQuery                    = "SELECT id_user, name, email FROM user WHERE deleted_at IS NULL ORDER BY created_at DESC"
+	findUserQuery                     = "SELECT id_user, name, email FROM user WHERE id_user = ? AND deleted_at IS NULL"
 
 	isEmailAlreadyRisteredErrorMsg = "invalid email"
 	isIdAlreadyRisteredErrorMsg    = "invalid id"
@@ -111,7 +112,7 @@ func (userDatabase *UserDatabase) IsIdAlreadyRegistered(user userDomain.User) er
 }
 
 func (userDatabase *UserDatabase) FindUsers() ([]userDomain.User, error) {
-	statement, err := userDatabase.connection.Prepare(getUsersQuery)
+	statement, err := userDatabase.connection.Prepare(findUsersQuery)
 
 	if err != nil {
 		return nil, err
@@ -137,4 +138,30 @@ func (userDatabase *UserDatabase) FindUsers() ([]userDomain.User, error) {
 	}
 
 	return users, nil
+}
+
+func (userDatabase *UserDatabase) FindUser(user userDomain.User) (userDomain.User, error) {
+	statement, err := userDatabase.connection.Prepare(findUserQuery)
+
+	if err != nil {
+		return userDomain.User{}, err
+	}
+
+	defer statement.Close()
+
+	rows, err := statement.Query(user.Id)
+
+	if err != nil {
+		return userDomain.User{}, err
+	}
+
+	var foundUser userDomain.User
+
+	for rows.Next() {
+		if err := rows.Scan(&foundUser.Id, &foundUser.Name, &foundUser.Email); err != nil {
+			return userDomain.User{}, err
+		}
+	}
+
+	return foundUser, nil
 }

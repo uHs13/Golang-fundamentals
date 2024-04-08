@@ -3,6 +3,8 @@ package requestEntityFieldsValidation
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/google/uuid"
 )
 
 const (
@@ -40,6 +42,14 @@ func ValidateEmail(email string) error {
 
 	if !emailRegex.MatchString(email) {
 		return fmt.Errorf(invalidEmailErrorMsg)
+	}
+
+	return nil
+}
+
+func ValidateId(hash string) error {
+	if _, err := uuid.Parse(hash); err != nil {
+		return err
 	}
 
 	return nil
