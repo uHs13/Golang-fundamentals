@@ -14,11 +14,13 @@ func NewUser(
 	name string,
 	email string,
 	dateCreated string,
+	dateUpdated string,
 ) *User {
 	return &User{
 		Id:          id,
 		Name:        name,
 		Email:       email,
 		DateCreated: dateCreated,
+		DateUpdated: dateUpdated,
 	}
 }

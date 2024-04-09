@@ -13,14 +13,15 @@ type FindUserRequest struct {
 }
 
 const (
-	emptyIdErrorMsg = "the id must not be empty"
+	EmptyIdErrorMsg = "the id must not be empty"
+	Id              = "id"
 )
 
 func DecodeFindUser(r *http.Request) (*FindUserRequest, error) {
-	params := mux.Vars(r)["id"]
+	params := mux.Vars(r)[Id]
 
 	if params == "" {
-		return nil, fmt.Errorf(emptyIdErrorMsg)
+		return nil, fmt.Errorf(EmptyIdErrorMsg)
 	}
 
 	user := &FindUserRequest{

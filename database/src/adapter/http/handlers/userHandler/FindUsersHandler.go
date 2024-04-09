@@ -43,6 +43,6 @@ func (findUsersHandler *FindUsersHandler) Handle(
 	routes.NewJsonResponse(
 		w,
 		"",
-		routesConstants.CreatedRequestConst,
+		routesConstants.OkRequestConst,
 	).SendArrayJson(routesConstants.UsersKeyConst, users)
 }

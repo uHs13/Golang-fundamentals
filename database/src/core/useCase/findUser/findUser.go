@@ -1,8 +1,10 @@
 package findUser
 
 import (
+	"database/src/adapter/http/routesConstants"
 	userDomain "database/src/core/domain/user"
 	"database/src/core/port/repositories"
+	"fmt"
 )
 
 type FindUser struct {
@@ -25,6 +27,10 @@ func (findUser *FindUser) Execute() (userDomain.User, error) {
 
 	if err != nil {
 		return userDomain.User{}, err
+	}
+
+	if user == (userDomain.User{}) {
+		return userDomain.User{}, fmt.Errorf(routesConstants.MessageUserNotFound)
 	}
 
 	return user, nil

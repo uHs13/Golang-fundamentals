@@ -8,4 +8,5 @@ type UserRepository interface {
 	IsIdAlreadyRegistered(user userDomain.User) error
 	FindUsers() ([]userDomain.User, error)
 	FindUser(user userDomain.User) (userDomain.User, error)
+	Edit(user userDomain.User) error
 }

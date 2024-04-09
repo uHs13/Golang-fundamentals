@@ -8,30 +8,28 @@ import (
 	userDomain "database/src/core/domain/user"
 	"database/src/core/port"
 	"database/src/core/port/repositories"
-	createUser "database/src/core/useCase/createUser"
+	"database/src/core/useCase/editUser"
 	"database/src/infra/database/repository"
 	"database/src/infra/requestEntity/userRequestEntity"
 	"net/http"
-
-	"github.com/google/uuid"
 )
 
-type CreateUserHandler struct {
+type EditUserHandler struct {
 	Connection   *sql.DB
 	UserDatabase repositories.UserRepository
 }
 
-func NewCreateUserHandler(connection *sql.DB) port.HandlerInterface {
-	return &CreateUserHandler{
+func NewEditUserHandler(connection *sql.DB) port.HandlerInterface {
+	return &EditUserHandler{
 		Connection: connection,
 	}
 }
 
-func (createUserHandler *CreateUserHandler) Handle(
+func (editUserHandler *EditUserHandler) Handle(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	user, err := createUserHandler.defineCreateUser(r)
+	user, err := editUserHandler.defineEditUser(r)
 
 	if err != nil {
 		routes.NewJsonResponse(
@@ -43,8 +41,8 @@ func (createUserHandler *CreateUserHandler) Handle(
 		return
 	}
 
-	err = createUser.NewCreateUser(
-		repository.NewUserDatabase(createUserHandler.Connection),
+	err = editUser.NewEditUser(
+		repository.NewUserDatabase(editUserHandler.Connection),
 		*user,
 	).Execute()
 
@@ -60,30 +58,30 @@ func (createUserHandler *CreateUserHandler) Handle(
 
 	routes.NewJsonResponse(
 		w,
-		routesConstants.MessageUserCreated,
-		routesConstants.CreatedRequestConst,
-	).SendSimpleJson()
+		"",
+		routesConstants.OkRequestConst,
+	).SendArrayJson(routesConstants.UserKeyConst, user)
 }
 
-func (createUserHandler *CreateUserHandler) defineCreateUser(
+func (editUserHandler *EditUserHandler) defineEditUser(
 	r *http.Request,
 ) (*userDomain.User, error) {
-	userRequest, err := userRequestEntity.DecodeCreateUserRequest(r)
+	userRequest, err := userRequestEntity.DecodeEditUser(r)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if err := userRequest.Validate(); err != nil {
+	if err = userRequest.ValidateEdit(); err != nil {
 		return nil, err
 	}
 
 	user := userDomain.NewUser(
-		uuid.NewString(),
+		userRequest.Id,
 		userRequest.Name,
 		userRequest.Email,
-		datetime.BuildFormattedCurrentDate(),
 		"",
+		datetime.BuildFormattedCurrentDate(),
 	)
 
 	return user, nil

@@ -17,6 +17,7 @@ const (
 	isIdAlreadyRegisteredUserQuery    = "SELECT id_user FROM user WHERE id_user = ? LIMIT 1"
 	findUsersQuery                    = "SELECT id_user, name, email FROM user WHERE deleted_at IS NULL ORDER BY created_at DESC"
 	findUserQuery                     = "SELECT id_user, name, email FROM user WHERE id_user = ? AND deleted_at IS NULL"
+	editUserQuery                     = "UPDATE user SET name = ?, email = ?, updated_at = ? WHERE id_user = ? AND deleted_at IS NULL"
 
 	isEmailAlreadyRisteredErrorMsg = "invalid email"
 	isIdAlreadyRisteredErrorMsg    = "invalid id"
@@ -164,4 +165,27 @@ func (userDatabase *UserDatabase) FindUser(user userDomain.User) (userDomain.Use
 	}
 
 	return foundUser, nil
+}
+
+func (userDatabase *UserDatabase) Edit(user userDomain.User) error {
+	statement, err := userDatabase.connection.Prepare(editUserQuery)
+
+	if err != nil {
+		return err
+	}
+
+	defer statement.Close()
+
+	_, err = statement.Exec(
+		user.Name,
+		user.Email,
+		user.DateUpdated,
+		user.Id,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -58,7 +58,7 @@ func (findUserHandler *FindUserHandler) Handle(
 	routes.NewJsonResponse(
 		w,
 		"",
-		routesConstants.CreatedRequestConst,
+		routesConstants.OkRequestConst,
 	).SendArrayJson(routesConstants.UserKeyConst, foundUser)
 }
 
@@ -77,6 +77,7 @@ func (findUserHandler *FindUserHandler) defineFindUser(
 
 	user := userDomain.NewUser(
 		userRequest.Id,
+		"",
 		"",
 		"",
 		"",
