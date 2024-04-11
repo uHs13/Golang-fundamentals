@@ -9,4 +9,5 @@ type UserRepository interface {
 	FindUsers() ([]userDomain.User, error)
 	FindUser(user userDomain.User) (userDomain.User, error)
 	Edit(user userDomain.User) error
+	Delete(user userDomain.User) error
 }

@@ -82,6 +82,7 @@ func (editUserHandler *EditUserHandler) defineEditUser(
 		userRequest.Email,
 		"",
 		datetime.BuildFormattedCurrentDate(),
+		"",
 	)
 
 	return user, nil

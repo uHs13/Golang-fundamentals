@@ -15,6 +15,7 @@ const (
 	GetUsersHandlerKeyConst   string = "getUsersHandler"
 	GetUserHandlerKeyConst    string = "getUserHandler"
 	PatchUserHandlerKeyConst  string = "patchUserHandler"
+	DeleteUserHandlerKeyConst string = "deleteUserHandler"
 )
 
 type UserRoutes struct {
@@ -52,6 +53,11 @@ func (userRoutes *UserRoutes) Register() {
 		routesConstants.PatchUser,
 		userRoutes.userHandlers[PatchUserHandlerKeyConst].Handle,
 	).Methods(http.MethodPatch)
+
+	userRoutes.app.HandleFunc(
+		routesConstants.PatchUser,
+		userRoutes.userHandlers[DeleteUserHandlerKeyConst].Handle,
+	).Methods(http.MethodDelete)
 }
 
 func createUserHandlers(connection *sql.DB) map[string]port.HandlerInterface {
@@ -60,5 +66,6 @@ func createUserHandlers(connection *sql.DB) map[string]port.HandlerInterface {
 		GetUsersHandlerKeyConst:   userHandler.NewFindUsersHandler(connection),
 		GetUserHandlerKeyConst:    userHandler.NewFindUserHandler(connection),
 		PatchUserHandlerKeyConst:  userHandler.NewEditUserHandler(connection),
+		DeleteUserHandlerKeyConst: userHandler.NewDeleteUserHandler(connection),
 	}
 }

@@ -15,6 +15,7 @@ func NewUser(
 	email string,
 	dateCreated string,
 	dateUpdated string,
+	dateDeleted string,
 ) *User {
 	return &User{
 		Id:          id,
@@ -22,5 +23,6 @@ func NewUser(
 		Email:       email,
 		DateCreated: dateCreated,
 		DateUpdated: dateUpdated,
+		DateDeleted: dateDeleted,
 	}
 }

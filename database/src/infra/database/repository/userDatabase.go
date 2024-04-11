@@ -18,6 +18,7 @@ const (
 	findUsersQuery                    = "SELECT id_user, name, email FROM user WHERE deleted_at IS NULL ORDER BY created_at DESC"
 	findUserQuery                     = "SELECT id_user, name, email FROM user WHERE id_user = ? AND deleted_at IS NULL"
 	editUserQuery                     = "UPDATE user SET name = ?, email = ?, updated_at = ? WHERE id_user = ? AND deleted_at IS NULL"
+	deleteUserQuery                   = "UPDATE user SET deleted_at = ? WHERE id_user = ?"
 
 	isEmailAlreadyRisteredErrorMsg = "invalid email"
 	isIdAlreadyRisteredErrorMsg    = "invalid id"
@@ -180,6 +181,27 @@ func (userDatabase *UserDatabase) Edit(user userDomain.User) error {
 		user.Name,
 		user.Email,
 		user.DateUpdated,
+		user.Id,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (userDatabase *UserDatabase) Delete(user userDomain.User) error {
+	statement, err := userDatabase.connection.Prepare(deleteUserQuery)
+
+	if err != nil {
+		return err
+	}
+
+	defer statement.Close()
+
+	_, err = statement.Exec(
+		user.DateDeleted,
 		user.Id,
 	)
 

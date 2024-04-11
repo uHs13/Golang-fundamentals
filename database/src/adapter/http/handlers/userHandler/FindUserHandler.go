@@ -81,6 +81,7 @@ func (findUserHandler *FindUserHandler) defineFindUser(
 		"",
 		"",
 		"",
+		"",
 	)
 
 	return user, nil

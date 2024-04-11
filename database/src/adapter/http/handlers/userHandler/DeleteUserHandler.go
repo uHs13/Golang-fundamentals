@@ -8,30 +8,28 @@ import (
 	userDomain "database/src/core/domain/user"
 	"database/src/core/port"
 	"database/src/core/port/repositories"
-	createUser "database/src/core/useCase/createUser"
+	"database/src/core/useCase/deleteUser"
 	"database/src/infra/database/repository"
 	"database/src/infra/requestEntity/userRequestEntity"
 	"net/http"
-
-	"github.com/google/uuid"
 )
 
-type CreateUserHandler struct {
+type DeleteUserHandler struct {
 	Connection   *sql.DB
 	UserDatabase repositories.UserRepository
 }
 
-func NewCreateUserHandler(connection *sql.DB) port.HandlerInterface {
-	return &CreateUserHandler{
+func NewDeleteUserHandler(connection *sql.DB) port.HandlerInterface {
+	return &DeleteUserHandler{
 		Connection: connection,
 	}
 }
 
-func (createUserHandler *CreateUserHandler) Handle(
+func (deleteUserHandler *DeleteUserHandler) Handle(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	user, err := createUserHandler.defineCreateUser(r)
+	user, err := deleteUserHandler.defineDeleteUser(r)
 
 	if err != nil {
 		routes.NewJsonResponse(
@@ -43,8 +41,8 @@ func (createUserHandler *CreateUserHandler) Handle(
 		return
 	}
 
-	err = createUser.NewCreateUser(
-		repository.NewUserDatabase(createUserHandler.Connection),
+	err = deleteUser.NewDeleteUser(
+		repository.NewUserDatabase(deleteUserHandler.Connection),
 		*user,
 	).Execute()
 
@@ -60,31 +58,31 @@ func (createUserHandler *CreateUserHandler) Handle(
 
 	routes.NewJsonResponse(
 		w,
-		routesConstants.MessageUserCreated,
-		routesConstants.CreatedRequestConst,
+		routesConstants.MessageUserDeleted,
+		routesConstants.OkRequestConst,
 	).SendSimpleJson()
 }
 
-func (createUserHandler *CreateUserHandler) defineCreateUser(
+func (deleteUserHandler *DeleteUserHandler) defineDeleteUser(
 	r *http.Request,
 ) (*userDomain.User, error) {
-	userRequest, err := userRequestEntity.DecodeCreateUserRequest(r)
+	userRequest, err := userRequestEntity.DecodeDeleteUser(r)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if err := userRequest.Validate(); err != nil {
+	if err := userRequest.ValidateId(); err != nil {
 		return nil, err
 	}
 
 	user := userDomain.NewUser(
-		uuid.NewString(),
-		userRequest.Name,
-		userRequest.Email,
+		userRequest.Id,
+		"",
+		"",
+		"",
+		"",
 		datetime.BuildFormattedCurrentDate(),
-		"",
-		"",
 	)
 
 	return user, nil
