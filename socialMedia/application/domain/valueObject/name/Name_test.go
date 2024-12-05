@@ -26,3 +26,9 @@ func TestShouldThrowAnErrorWhenNameIsNotComposedByAtLeastTwoWords(t *testing.T) 
 
 	require.Equal(t, err.Error(), "the name must contain at least two words")
 }
+
+func TestShouldThrowAnErrorWhenNameIsTooLong(t *testing.T) {
+	_, err := valueObject.NewName("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia")
+
+	require.Equal(t, err.Error(), "the name cannot be longer than '255' characters")
+}

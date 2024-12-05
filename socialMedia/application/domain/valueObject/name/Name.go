@@ -2,7 +2,13 @@ package valueObject
 
 import (
 	"errors"
+	"fmt"
 	"strings"
+)
+
+const (
+	nameMaxLengthConst          = 255
+	nameMinimumWordsAmountConst = 2
 )
 
 type Name struct {
@@ -24,13 +30,33 @@ func (name *Name) GetValue() string {
 }
 
 func (name *Name) validate() error {
+	if err := name.validateNameLength(); err != nil {
+		return err
+	}
+
+	if err := name.validateNameMinimumWordsAmount(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (name *Name) validateNameLength() error {
 	if len(name.GetValue()) == 0 {
 		return errors.New("the name cannot be empty")
 	}
 
+	if len(name.GetValue()) > nameMaxLengthConst {
+		return fmt.Errorf("the name cannot be longer than '%d' characters", nameMaxLengthConst)
+	}
+
+	return nil
+}
+
+func (name *Name) validateNameMinimumWordsAmount() error {
 	nameComponents := strings.Split(name.GetValue(), " ")
 
-	if len(nameComponents) < 2 {
+	if len(nameComponents) < nameMinimumWordsAmountConst {
 		return errors.New("the name must contain at least two words")
 	}
 
