@@ -1,6 +1,7 @@
-package user
+package factory
 
 import (
+	"socialMedia/application/domain/user"
 	valueObjectEmail "socialMedia/application/domain/valueObject/email"
 	valueObjectName "socialMedia/application/domain/valueObject/name"
 	valueObjectNickname "socialMedia/application/domain/valueObject/nickname"
@@ -8,26 +9,14 @@ import (
 	valueObjectUuid "socialMedia/application/domain/valueObject/uuid"
 )
 
-type User struct {
-	id       valueObjectUuid.Uuid
-	name     valueObjectName.Name
-	nickname valueObjectNickname.Nickname
-	email    valueObjectEmail.Email
-	password valueObjectPassword.Password
-}
+type UserFactory struct{}
 
-func NewUser(
+func (userFactory *UserFactory) MakeComplete(
 	id valueObjectUuid.Uuid,
 	name valueObjectName.Name,
 	nickname valueObjectNickname.Nickname,
 	email valueObjectEmail.Email,
 	password valueObjectPassword.Password,
-) *User {
-	return &User{
-		id:       id,
-		name:     name,
-		nickname: nickname,
-		email:    email,
-		password: password,
-	}
+) *user.User {
+	return user.NewUser(id, name, nickname, email, password)
 }
