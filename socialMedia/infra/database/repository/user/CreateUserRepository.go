@@ -5,6 +5,10 @@ import (
 	port "socialMedia/application/port/database"
 )
 
+const (
+	createUserQuery = "INSERT INTO user (id, name, nickname, email) VALUES (?, ?, ?, ?)"
+)
+
 type CreateUserRepository struct {
 	database port.DatabaseConnectionInterface
 }
@@ -18,5 +22,22 @@ func NewCreateUserRepository(
 }
 
 func (repository *CreateUserRepository) Execute(user *user.User) (*user.User, error) {
-	return nil, nil
+	statement, err := repository.database.GetConnection().Prepare(createUserQuery)
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = statement.Exec(
+		user.GetId(),
+		user.GetName(),
+		user.GetNickname(),
+		user.GetEmail(),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

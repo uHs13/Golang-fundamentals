@@ -31,3 +31,23 @@ func NewUser(
 		password: password,
 	}
 }
+
+func (user *User) GetId() string {
+	return user.id.GetValue()
+}
+
+func (user *User) GetName() string {
+	return user.name.GetValue()
+}
+
+func (user *User) GetNickname() string {
+	return user.nickname.GetValue()
+}
+
+func (user *User) GetEmail() string {
+	return user.email.GetValue()
+}
+
+func (user *User) GetPassword() valueObjectPassword.Password {
+	return user.password
+}
