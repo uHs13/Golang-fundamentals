@@ -20,3 +20,9 @@ func TestShouldThrowAnErrorWhenNicknameIsTooLong(t *testing.T) {
 
 	require.Equal(t, err.Error(), "the nickname length must not exceed '255' characters")
 }
+
+func TestShouldThrowAnErrorWhenNicknameIsEmpty(t *testing.T) {
+	_, err := valueObject.NewNickname("")
+
+	require.Equal(t, err.Error(), "the nickname cannot be empty")
+}

@@ -1,4 +1,4 @@
-package userRepository_test
+package userrepository_test
 
 import (
 	port "socialMedia/application/port/database"

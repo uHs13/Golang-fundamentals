@@ -45,7 +45,11 @@ func (userFactory *UserFactory) MakeComplete(
 		return nil, err
 	}
 
-	passwordValueObject, err := valueObjectPassword.NewPassword(password, infraPassword.NewPasswordValidator())
+	passwordValueObject, err := valueObjectPassword.NewPassword(
+		password,
+		infraPassword.NewPasswordValidator(),
+		infraPassword.NewPasswordEncrypter(),
+	)
 
 	if err != nil {
 		return nil, err

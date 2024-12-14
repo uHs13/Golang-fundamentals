@@ -24,6 +24,10 @@ func NewNickname(nickName string) (*Nickname, error) {
 }
 
 func (nickname *Nickname) validate() error {
+	if len(nickname.GetValue()) == 0 {
+		return errors.New("the nickname cannot be empty")
+	}
+
 	if len(nickname.GetValue()) > nicknameMaxLengthConst {
 		errorMessage := fmt.Sprintf("the nickname length must not exceed '%d' characters", nicknameMaxLengthConst)
 		return errors.New(errorMessage)

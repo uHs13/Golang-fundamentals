@@ -1,12 +1,13 @@
-package userRepository
+package userrepository
 
 import (
 	"socialMedia/application/domain/user"
 	port "socialMedia/application/port/database"
+	portRepository "socialMedia/application/port/repository/user"
 )
 
 const (
-	createUserQuery = "INSERT INTO user (id, name, nickname, email) VALUES (?, ?, ?, ?)"
+	createUserQuery = "INSERT INTO user (id, name, nickname, email, password) VALUES (?, ?, ?, ?, ?)"
 )
 
 type CreateUserRepository struct {
@@ -15,7 +16,7 @@ type CreateUserRepository struct {
 
 func NewCreateUserRepository(
 	database port.DatabaseConnectionInterface,
-) *CreateUserRepository {
+) portRepository.CreateUserRepositoryInterface {
 	return &CreateUserRepository{
 		database: database,
 	}
@@ -28,11 +29,19 @@ func (repository *CreateUserRepository) Execute(user *user.User) (*user.User, er
 		return nil, err
 	}
 
+	password := user.GetPassword()
+	passwordHash, err := password.GenerateHash()
+
+	if err != nil {
+		return nil, err
+	}
+
 	_, err = statement.Exec(
 		user.GetId(),
 		user.GetName(),
 		user.GetNickname(),
 		user.GetEmail(),
+		passwordHash,
 	)
 
 	if err != nil {
