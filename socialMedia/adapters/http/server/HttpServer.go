@@ -19,9 +19,7 @@ func NewHttpServer() *HttpServer {
 
 func (httpServer *HttpServer) Start() error {
 	muxRouter := mux.NewRouter()
-	// negroniMiddleware := negroni.New(negroni.NewLogger())
 
-	// handler.MakeProductHandlers(muxRouter, negroniMiddleware, httpServer.Service)
 	http.Handle("/", muxRouter)
 
 	server := &http.Server{
